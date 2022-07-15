@@ -87,6 +87,11 @@
 					var t = 1000;
 					var ifr = document.createElement('iframe');
 					setTimeout(function() {
+						let hidden = window.document.hidden || window.document.mozHidden || window.document.msHidden || window.document.webkitHidden;
+						if (typeof hidden !== "undefined" && hidden === true) {
+							return;
+						}
+
 						if (hasApp) {
 							$.modal({
 								title: "提示",
@@ -123,6 +128,7 @@
 					ifr.style.display = 'none';
 					document.body.appendChild(ifr);
 					setTimeout(function() { //启动app时间较长处理
+
 						let t2 = Date.now();
 						if (t2 - t1 < t + 100) {
 							hasApp = false;
