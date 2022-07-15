@@ -92,26 +92,7 @@
 						if (typeof hidden !== "undefined" && hidden === true) {
 							return;
 						}
-
-						if (hasApp) {
-							$.modal({
-								title: "提示",
-								text: "已安装APP",
-								buttons: [{
-										text: "打开",
-										onClick: function() {
-											window.location = Deal;
-										}
-									},
-									{
-										text: "关闭",
-										onClick: function() {
-											$.closeModal();
-										},
-									}
-								]
-							});
-						} else {
+						if (!hasApp) {
 							$.modal({
 								title: "提示",
 								text: "没有安装APP",
@@ -125,6 +106,7 @@
 						}
 						document.body.removeChild(ifr);
 					}, 2000);
+					
 					ifr.src = Deal;
 					ifr.style.display = 'none';
 					document.body.appendChild(ifr);
