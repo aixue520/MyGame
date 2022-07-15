@@ -1,45 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>openapp</title>
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8">
+		<title>openapp</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.3/style/weui.min.css">
+		<link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.1/css/jquery-weui.min.css">
+		<style>
+			body {
+				width: 100vw;
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		</style>
+	</head>
+	<body>
+		<button class="weui-btn weui-btn_mini weui-btn_primary">打开app</button>
+	</body>
+	<script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+	<script>
+		$(function() {
+			$(".weui-btn").click(function() {
+				openApp();
+			})
 
-<fieldset>
-    <legend>User01</legend>
-    <button onclick="openApp()">打开app</button>
-</fieldset>
-<script>
-    function openApp(){
-                var ua = window.navigator.userAgent.toLowerCase();
-                //微信
-                if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-                    window.location.href='****';//这个地方老七直接用的应用宝下载链接
-                }else{//非微信浏览器
-                    if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
-                        window.location = 'dslangya://';
-                        var ifr = document.createElement("iframe");
-                        ifr.src = "alipays://platformapi/startapp?appId=66666674"; /***打开app的协议，ios同事提供***/
-                        ifr.style.display = "none";
-                        document.body.appendChild(ifr);
-                        window.setTimeout(function(){
-                            document.body.removeChild(ifr);
-                            window.location.href = "https://www.baidu.com"; /***下载app的地址***/
-                        },2000);
-     
-                    }else if (navigator.userAgent.match(/android/i)) {
-     
-                        var state = null;
-                        try {
-                            window.location = 'alipays://platformapi/startapp?appId=66666674'; //安卓兄弟可以给你
-                            setTimeout(function(){
-                                window.location= "https://www.baidu.com"; //android下载地址
-                            },2000);
-                        } catch(e) {}
-                    }
-                }
-            }
-</script>
-</body>
+			// androidDeal：安卓app scheme协议（安卓开发提供），iosDeal：iOS app scheme协议（iOS开发提供）
+			// androidUrl：安卓app下载链接，iosUrl：iOS app下载链接 WXUrl：微信下载地址
+
+			var androidDeal = "alipays://platformapi/startapp?appId=66666674";
+			var iosDeal = "alipays://platformapi/startapp?appId=66666674"
+			var androidUrl = "https://www.baidu.com"
+			var iosUrl = "https://www.baidu.com"
+			var WXUrl = "****"
+
+			function openApp() {
+
+				// var ua = window.navigator.userAgent.toLowerCase();
+				// //微信
+				// if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+				// 	window.location.href = '****'; //这个地方老七直接用的应用宝下载链接
+				// } else { //非微信浏览器
+				// 	if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+				// 		window.location = 'dslangya://';
+				// 		var ifr = document.createElement("iframe");
+				// 		ifr.src = "alipays://platformapi/startapp?appId=66666674"; /***打开app的协议，ios同事提供***/
+				// 		ifr.style.display = "none";
+				// 		document.body.appendChild(ifr);
+				// 		window.setTimeout(function() {
+				// 			document.body.removeChild(ifr);
+				// 			window.location.href = "https://www.baidu.com"; /***下载app的地址***/
+				// 		}, 2000);
+
+				// 	} else if (navigator.userAgent.match(/android/i)) {
+
+				// 		var state = null;
+				// 		try {
+				// 			window.location = 'alipays://platformapi/startapp?appId=66666674'; //安卓兄弟可以给你
+				// 			setTimeout(function() {
+				// 				window.location = "https://www.baidu.com"; //android下载地址
+				// 			}, 2000);
+				// 		} catch (e) {}
+				// 	}
+				// }
+
+
+				var ua = window.navigator.userAgent.toLowerCase();
+				//微信
+				if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+					window.location.href = WXUrl; //这个地方老七直接用的应用宝下载链接
+				} else {
+					var Deal = '',
+						Url = '';
+					if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+						Deal = iosDeal
+						Url = iosUrl
+					} else if (navigator.userAgent.match(/android/i)) {
+						Deal = androidDeal
+						Url = androidUrl
+					}
+					//在iframe 中打开APP
+					var hasApp = true;
+					var t1 = Date.now();
+					var t = 1000;
+					var ifr = document.createElement('iframe');
+					setTimeout(function() {
+						if (hasApp) {
+							$.modal({
+								title: "提示",
+								text: "已安装APP",
+								buttons: [{
+										text: "打开",
+										onClick: function() {
+											window.location = Deal;
+										}
+									},
+									{
+										text: "关闭",
+										onClick: function() {
+											$.closeModal();
+										},
+									}
+								]
+							});
+						} else {
+							$.modal({
+								title: "提示",
+								text: "没有安装APP",
+								buttons: [{
+									text: "去安装",
+									onClick: function() {
+										window.location = Url; //Ios下载地址
+									}
+								}]
+							});
+						}
+						document.body.removeChild(ifr);
+					}, 2000);
+					ifr.src = Deal;
+					ifr.style.display = 'none';
+					document.body.appendChild(ifr);
+					setTimeout(function() { //启动app时间较长处理
+						let t2 = Date.now();
+						if (t2 - t1 < t + 100) {
+							hasApp = false;
+						}
+					}, 1000);
+				}
+			}
+		})
+	</script>
 </html>
