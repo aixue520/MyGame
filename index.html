@@ -89,14 +89,12 @@
 						Deal = iosDeal
 						Url = iosUrl
 						//在iframe 中打开APP
-						var t1 = Date.now();
-						var t = 1000;
 						var ifr = document.createElement('iframe');
 						setTimeout(function() {
-							let hidden = window.document.hidden || window.document.mozHidden || window.document.msHidden || window.document.webkitHidden;
-							if (typeof hidden !== "undefined" && hidden === true) {
-								return;
-							}
+							// let hidden = window.document.hidden || window.document.mozHidden || window.document.msHidden || window.document.webkitHidden;
+							// if (typeof hidden !== "undefined" && hidden === true) {
+							// 	return;
+							// }
 							if (!hasApp) {
 								$.modal({
 									title: "提示",
@@ -111,15 +109,19 @@
 							}
 							document.body.removeChild(ifr);
 						}, 2000);
+						ifr.src = Deal;
+						ifr.style.display = 'none';
+						document.body.appendChild(ifr);
+						
 					} else if (navigator.userAgent.match(/android/i)) {
 						Deal = androidDeal
 						Url = androidUrl
 						window.location = androidDeal; //安卓兄弟可以给你
 						setTimeout(function() {
-							let hidden = window.document.hidden || window.document.mozHidden || window.document.msHidden || window.document.webkitHidden;
-							if (typeof hidden !== "undefined" && hidden === true) {
-								return;
-							}
+							// let hidden = window.document.hidden || window.document.mozHidden || window.document.msHidden || window.document.webkitHidden;
+							// if (typeof hidden !== "undefined" && hidden === true) {
+							// 	return;
+							// }
 							if (!hasApp) {
 								$.modal({
 									title: "提示",
@@ -135,9 +137,8 @@
 						}, 2000);
 					}
 					
-					ifr.src = Deal;
-					ifr.style.display = 'none';
-					document.body.appendChild(ifr);
+					var t1 = Date.now();
+					var t = 1000;
 					setTimeout(function() { //启动app时间较长处理
 						let t2 = Date.now();
 						if (t2 - t1 < t + 100) {
