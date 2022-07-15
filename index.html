@@ -2,12 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>神经猫</title>
-    <script src="easeljs-0.7.1.min.js"></script>
-    <script src="Circle.js"></script>
+    <title>openapp</title>
 </head>
 <body>
-    <canvas width="800px" height="800px" id="gameView"></canvas>
-    <script src="app.js"></script>
+
+<fieldset>
+    <legend>User01</legend>
+    <button onclick="openApp()">打开app</button>
+</fieldset>
+<script>
+    function openApp(){
+                var ua = window.navigator.userAgent.toLowerCase();
+                //微信
+                if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+                    window.location.href='****';//这个地方老七直接用的应用宝下载链接
+                }else{//非微信浏览器
+                    if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+                        window.location = 'dslangya://';
+                        var ifr = document.createElement("iframe");
+                        ifr.src = "alipays://platformapi/startapp?appId=66666674"; /***打开app的协议，ios同事提供***/
+                        ifr.style.display = "none";
+                        document.body.appendChild(ifr);
+                        window.setTimeout(function(){
+                            document.body.removeChild(ifr);
+                            window.location.href = "https://www.baidu.com"; /***下载app的地址***/
+                        },2000);
+     
+                    }else if (navigator.userAgent.match(/android/i)) {
+     
+                        var state = null;
+                        try {
+                            window.location = 'alipays://platformapi/startapp?appId=66666674'; //安卓兄弟可以给你
+                            setTimeout(function(){
+                                window.location= "https://www.baidu.com"; //android下载地址
+                            },2000);
+                        } catch(e) {}
+                    }
+                }
+            }
+</script>
 </body>
 </html>
